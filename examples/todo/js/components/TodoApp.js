@@ -9,14 +9,23 @@ class TodoApp extends React.Component {
       new AddTodoMutation({text, viewer: this.props.viewer})
     );
   }
+  showMore = () => {
+    var first = this.props.relay.variables.first;
+    this.props.relay.setVariables({first: first + 1});
+  }
   render() {
     var hasTodos = this.props.viewer.todos.totalCount > 0;
+
+    var edges = this.props.viewer.todos;
+
+    console.log('parent', edges.__dataID__);
+
     return (
       <div>
         <section className="todoapp">
           <header className="header">
-            <h1>
-              todos
+            <h1 onClick={this.showMore}>
+              show more
             </h1>
             <TodoTextInput
               autoFocus={true}
@@ -57,10 +66,13 @@ class TodoApp extends React.Component {
 }
 
 export default Relay.createContainer(TodoApp, {
+  initialVariables: {
+    first: 1
+  },
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
-        todos(first: 9007199254740991) {
+        todos(first: $first) {
           edges {
             node {
               id,

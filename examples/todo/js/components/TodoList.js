@@ -24,6 +24,9 @@ class TodoList extends React.Component {
   render() {
     var numTodos = this.props.todos.totalCount;
     var numCompletedTodos = this.props.todos.completedCount;
+
+    console.log('child ', this.props.todos.__dataID__);
+
     return (
       <section className="main">
         <input
